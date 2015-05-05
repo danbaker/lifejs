@@ -4,6 +4,7 @@
 	var squareSize = 25;
 	var boardWide = 1;
 	var boardHigh = 1;
+	var lifeGame;
 
 	initialize();
 
@@ -13,20 +14,8 @@
 	}
 
 	function redrawEverything() {
-		ctx.strokeStyle = '#0000ff';
-		ctx.lineWidth = 1;
-		ctx.beginPath();
-		for(var x=0; x<=boardWide; x++) {
-			ctx.moveTo(x*squareSize+0.5, 0);
-			ctx.lineTo(x*squareSize+0.5, boardHigh*squareSize);
-		}
-		ctx.stroke();
-		ctx.beginPath();
-		for(var y=0; y<=boardHigh; y++) {
-			ctx.moveTo(0,y*squareSize+0.5);
-			ctx.lineTo(boardWide*squareSize,y*squareSize+0.5);
-		}
-		ctx.stroke();
+		lifeGame.redrawBackground();
+		lifeGame.redrawCurrentState();
 	}
 
 	function resizeCanvas()
@@ -36,16 +25,21 @@
     	var topOffset = elemRect.top - bodyRect.top;
 		
 		var w = window.innerWidth - elemRect.left*2;
-		boardWide = Math.floor(w / squareSize); 
-		w = boardWide * squareSize;
+		var bWide = Math.floor(w / squareSize);
 		
 		var h = window.innerHeight - topOffset - 10;
-		boardHigh = Math.floor(h / squareSize); 
-		h = boardHigh * squareSize;
+		var bHigh = Math.floor(h / squareSize);
 		
-		htmlCanvas.width = w + 1;
-		htmlCanvas.height = h + 1;
-		redrawEverything();
+		if (bWide != boardWide || bHigh != boardHigh)
+		{
+			boardWide = bWide;
+			boardHigh = bHigh;
+			htmlCanvas.width = boardWide * squareSize + 1;
+			htmlCanvas.height = boardHigh * squareSize + 1;
+		
+			lifeGame = new LifeGame(boardWide, boardHigh, ctx, squareSize);
+		}
+		redrawEverything();		
 	}
 	
 })();
