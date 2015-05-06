@@ -17,6 +17,9 @@ LifeModelTests.prototype.runTests = function()
 	this.testCountNeighborsOneRow();
 	this.testCountNeighborsOneColumn();
 	this.testNextStateZeros();
+	this.testNextStateOnes();
+	this.testNextStateLiveNeighbors();
+	this.testNextStateDeadNeighbors();
 };
 
 LifeModelTests.prototype.testNormalBoard = function()
@@ -109,4 +112,124 @@ LifeModelTests.prototype.testNextStateZeros = function()
 		assert(v == 0);
 		assert(model.nextState(x,y) == 0);
 	});
+};
+
+LifeModelTests.prototype.testNextStateOnes = function()
+{
+	var model = new LifeModel(5,8);
+	model.fillWith(1);
+	model.visitAll(function(x,y,v) {
+		assert(v == 1);
+		if (x == 0 && y == 0) {
+			assert(model.nextState(x,y) == 1);
+		} else if (x == 4 && y == 0) {
+			assert(model.nextState(x,y) == 1);
+		} else if (x == 4 && y == 7) {
+			assert(model.nextState(x,y) == 1);
+		} else if (x == 0 && y == 7) {
+			assert(model.nextState(x,y) == 1);
+		} else {
+				assert(model.nextState(x,y) == 0);
+		}
+	});
+};
+
+LifeModelTests.prototype.testNextStateLiveNeighbors = function()
+{
+	//		0	1	2	3
+	//	0	x1	x2	.	.				x1 has 1 neighbor -> dead
+	//	1	.	.	X	X				x2 has 2 neighbors -> live
+	//	2	.	.	.	x4				x4 has 4 neighbors -> dead
+	//	3	.	X	X	X				x6 has 6 neighbors -> dead
+	//	4	.	.	x6	.				x7 has 7 neighbors -> dead
+	//	5	.	X	X	X
+	//	6	.	X	x7	.
+	//	7	.	X	X	X
+	var model = new LifeModel(5,8);
+	model.fillWith(0);
+	model.setAt(0,0,1);
+	model.setAt(1,0,1);
+	model.setAt(2,1,1);
+	model.setAt(3,1,1);
+	model.setAt(3,2,1);
+	model.setAt(1,3,1);
+	model.setAt(2,3,1);
+	model.setAt(3,3,1);
+	model.setAt(2,4,1);
+	model.setAt(1,5,1);
+	model.setAt(2,5,1);
+	model.setAt(3,5,1);
+	model.setAt(1,6,1);
+	model.setAt(2,6,1);
+	model.setAt(1,7,1);
+	model.setAt(2,7,1);
+	model.setAt(3,7,1);
+
+	assert(model.neighbors(0,0) == 1, "0,0="+model.neighbors(0,0));
+	assert(model.neighbors(1,0) == 2, "1,0="+model.neighbors(1,0));
+	assert(model.neighbors(3,2) == 4, "3,2="+model.neighbors(3,2));
+	assert(model.neighbors(2,4) == 6, "2,4="+model.neighbors(2,4));
+	assert(model.neighbors(2,6) == 7, "2,6="+model.neighbors(2,6));
+
+	assert(model.nextState(0,0) == 0);
+	assert(model.nextState(1,0) == 1);
+	assert(model.nextState(3,2) == 0);
+	assert(model.nextState(2,4) == 0);
+	assert(model.nextState(2,6) == 0);
+};
+
+LifeModelTests.prototype.testNextStateDeadNeighbors = function()
+{
+	//		0	1	2	3
+	//	0	.1	X	.2	X				.1 has 1 neighbor -> dead
+	//	1	.	.	.3	.				.2 has 2 neighbors -> dead
+	//	2	X	.4	.	X				.3 has 3 neighbors -> live
+	//	3	X	X	X	X				.4 has 4 neighbors -> dead
+	//	4	.5	X	.6	.				.5 has 5 neighbors -> dead
+	//	5	X	X	X	.				.6 has 6 neighbors -> dead
+	//	6	X	.7	.	.				.7 has 7 neighbors -> dead
+	//	7	X	X	X	.				.8 has 8 neighbors -> dead
+	//	8	X	.8	X	.
+	//	9	X	X	X	.
+	var model = new LifeModel(5,10);
+	model.fillWith(0);
+	model.setAt(1,0,1);
+	model.setAt(3,0,1);
+	model.setAt(0,2,1);
+	model.setAt(3,2,1);
+	model.setAt(0,3,1);
+	model.setAt(1,3,1);
+	model.setAt(2,3,1);
+	model.setAt(3,3,1);
+	model.setAt(1,4,1);
+	model.setAt(0,5,1);
+	model.setAt(1,5,1);
+	model.setAt(2,5,1);
+	model.setAt(0,6,1);
+	model.setAt(0,7,1);
+	model.setAt(1,7,1);
+	model.setAt(2,7,1);
+	model.setAt(0,8,1);
+	model.setAt(2,8,1);
+	model.setAt(0,9,1);
+	model.setAt(1,9,1);
+	model.setAt(2,9,1);
+
+	assert(model.neighbors(0,0) == 1, "0,0="+model.neighbors(0,0));
+	assert(model.neighbors(2,0) == 2, "2,0="+model.neighbors(2,0));
+	assert(model.neighbors(2,1) == 3, "2,1="+model.neighbors(2,1));
+	assert(model.neighbors(1,2) == 4, "1,2="+model.neighbors(1,2));
+	assert(model.neighbors(0,4) == 5, "0,4="+model.neighbors(0,4));
+	assert(model.neighbors(2,4) == 6, "2,4="+model.neighbors(2,4));
+	assert(model.neighbors(1,6) == 7, "1,6="+model.neighbors(1,6));
+	assert(model.neighbors(1,8) == 8, "1,8="+model.neighbors(1,8));
+
+	assert(model.nextState(0,0) == 0);
+	assert(model.nextState(2,0) == 0);
+	assert(model.nextState(2,1) == 1);
+	assert(model.nextState(1,2) == 0);
+	assert(model.nextState(0,4) == 0);
+	assert(model.nextState(2,4) == 0);
+	assert(model.nextState(1,6) == 0);
+	assert(model.nextState(1,8) == 0);
 };
