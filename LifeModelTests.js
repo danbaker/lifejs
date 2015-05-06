@@ -12,17 +12,18 @@ LifeModelTests.prototype.runTests = function()
 {
 	this.testNormalBoard();
 	this.testEdges();
-	this.testCountZero();
-	this.testCount8();
-	this.testCountOneRow();
-	this.testCountOneColumn();
+	this.testCountNeighborsZero();
+	this.testCountNeighbors8();
+	this.testCountNeighborsOneRow();
+	this.testCountNeighborsOneColumn();
+	this.testNextStateZeros();
 };
 
 LifeModelTests.prototype.testNormalBoard = function()
 {
 	var model = new LifeModel(5,8);
 	for(var x=0; x<5; x++) {
-		for(y=0; y<8; y++) {
+		for(var y=0; y<8; y++) {
 			model.setAt(x,y,0);
 			assert(model.getAt(x,y) == 0);			
 			model.setAt(x,y,1);
@@ -48,7 +49,7 @@ LifeModelTests.prototype.testEdges = function()
 	}
 };
 
-LifeModelTests.prototype.testCountZero = function()
+LifeModelTests.prototype.testCountNeighborsZero = function()
 {
 	var model = new LifeModel(5,8);
 	model.fillWith(0);
@@ -59,7 +60,7 @@ LifeModelTests.prototype.testCountZero = function()
 	}
 };
 
-LifeModelTests.prototype.testCount8 = function()
+LifeModelTests.prototype.testCountNeighbors8 = function()
 {
 	var model = new LifeModel(5,8);
 	model.fillWith(1);
@@ -70,7 +71,7 @@ LifeModelTests.prototype.testCount8 = function()
 	}
 };
 
-LifeModelTests.prototype.testCountOneRow = function()
+LifeModelTests.prototype.testCountNeighborsOneRow = function()
 {
 	var model = new LifeModel(5,8);
 	model.fillWith(0);
@@ -85,7 +86,7 @@ LifeModelTests.prototype.testCountOneRow = function()
 	assert(model.neighbors(2,5) == 0);	
 };
 
-LifeModelTests.prototype.testCountOneColumn = function()
+LifeModelTests.prototype.testCountNeighborsOneColumn = function()
 {
 	var model = new LifeModel(5,8);
 	model.fillWith(0);
@@ -98,4 +99,14 @@ LifeModelTests.prototype.testCountOneColumn = function()
 	assert(model.neighbors(3,2) == 2);
 	assert(model.neighbors(4,2) == 3);
 	assert(model.neighbors(5,2) == 0);	
+};
+
+LifeModelTests.prototype.testNextStateZeros = function()
+{
+	var model = new LifeModel(5,8);
+	model.fillWith(0);
+	model.visitAll(function(x,y,v) {
+		assert(v == 0);
+		assert(model.nextState(x,y) == 0);
+	});
 };
