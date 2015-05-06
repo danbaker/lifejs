@@ -6,6 +6,8 @@ function LifeGame(boardWidth, boardHeight, ctx, squareSize)
 	this.boardHeight = boardHeight;
 	this.ctx = ctx;
 	this.squareSize = squareSize;
+	this.board = new LifeModel(boardWidth, boardHeight);
+	this.board.randomFill();
 }
 
 LifeGame.prototype.redrawBackground = function()
@@ -28,5 +30,17 @@ LifeGame.prototype.redrawBackground = function()
 
 LifeGame.prototype.redrawCurrentState = function()
 {
-	
+	for(var x=0; x<this.board.boardWidth; x++) {
+		for(var y=0; y<this.board.boardHeight; y++) {
+			var v = this.board.getAt(x,y);
+			if (v) {
+				this.ctx.fillStyle = '#0000ff';				
+			} else {
+				this.ctx.fillStyle = '#808080';
+			}
+			var xx = x * this.squareSize+1;
+			var yy = y * this.squareSize+1;
+			this.ctx.fillRect(xx,yy,this.squareSize-1,this.squareSize-1);
+		}
+	}
 };

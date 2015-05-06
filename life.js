@@ -1,7 +1,7 @@
 (function() {
 	var htmlCanvas = document.getElementById('c');
 	var ctx = htmlCanvas.getContext('2d');
-	var squareSize = 25;
+	var squareSize = 16;
 	var boardWide = 1;
 	var boardHigh = 1;
 	var lifeGame;
