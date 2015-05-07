@@ -1,10 +1,12 @@
+
+var lifeGame;
+
 (function() {
 	var htmlCanvas = document.getElementById('c');
 	var ctx = htmlCanvas.getContext('2d');
 	var squareSize = 16;
 	var boardWide = 1;
 	var boardHigh = 1;
-	var lifeGame;
 
 	initialize();
 
@@ -43,3 +45,15 @@
 	}
 	
 })();
+
+function playButton()
+{
+	var btn = document.getElementById('playBtn');
+	if (lifeGame.isRunning) {
+		lifeGame.pauseRunning();
+		btn.value = "Start";
+	} else {
+		lifeGame.startRunning();		
+		btn.value = "Pause";
+	}
+}

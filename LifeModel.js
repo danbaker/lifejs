@@ -83,3 +83,18 @@ LifeModel.prototype.nextState = function(x,y)
 	return nextLive;
 };
 
+LifeModel.prototype.tickToNextState = function()
+{
+	var board = new Array(this.boardWidth);
+	for(var x=0; x<this.boardWidth; x++) {
+		board[x] = new Array(this.boardHeight);
+	}
+
+	var that = this;
+	this.visitAll(function(x,y) {
+		var nextState = that.nextState(x,y);
+		board[x][y] = nextState;
+	});
+	
+	this.board = board;
+};

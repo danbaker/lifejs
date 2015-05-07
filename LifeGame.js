@@ -2,6 +2,8 @@
 // Create a new "Game of Life Game"
 function LifeGame(boardWidth, boardHeight, ctx, squareSize)
 {
+	this.isRunning = false;
+	this.runningTimer = 0;
 	this.boardWidth = boardWidth;
 	this.boardHeight = boardHeight;
 	this.ctx = ctx;
@@ -43,4 +45,23 @@ LifeGame.prototype.redrawCurrentState = function()
 			this.ctx.fillRect(xx,yy,this.squareSize-1,this.squareSize-1);
 		}
 	}
+};
+
+LifeGame.prototype.startRunning = function()
+{
+	var that = this;
+	this.isRunning = true;
+	console.log("Start");
+	this.runningTimer = setInterval(function() {
+		console.log("Ping");
+		that.board.tickToNextState();
+		that.redrawCurrentState();
+	}, 1);
+};
+
+LifeGame.prototype.pauseRunning = function()
+{
+	this.isRunning = false;
+	console.log("Paused");
+	clearInterval(this.runningTimer);
 };

@@ -20,6 +20,8 @@ LifeModelTests.prototype.runTests = function()
 	this.testNextStateOnes();
 	this.testNextStateLiveNeighbors();
 	this.testNextStateDeadNeighbors();
+	this.testTickZero()
+	this.testTickOnes();
 };
 
 LifeModelTests.prototype.testNormalBoard = function()
@@ -129,7 +131,7 @@ LifeModelTests.prototype.testNextStateOnes = function()
 		} else if (x == 0 && y == 7) {
 			assert(model.nextState(x,y) == 1);
 		} else {
-				assert(model.nextState(x,y) == 0);
+			assert(model.nextState(x,y) == 0);
 		}
 	});
 };
@@ -232,4 +234,34 @@ LifeModelTests.prototype.testNextStateDeadNeighbors = function()
 	assert(model.nextState(2,4) == 0);
 	assert(model.nextState(1,6) == 0);
 	assert(model.nextState(1,8) == 0);
+};
+
+LifeModelTests.prototype.testTickZero = function()
+{
+	var model = new LifeModel(5,8);
+	model.fillWith(0);
+	model.tickToNextState();
+	model.visitAll(function(x,y,v) {
+		assert(v == 0);
+	});
+};
+
+LifeModelTests.prototype.testTickOnes = function()
+{
+	var model = new LifeModel(5,8);
+	model.fillWith(1);
+	model.tickToNextState();
+	model.visitAll(function(x,y,v) {
+		if (x == 0 && y == 0) {
+			assert(v == 1);
+		} else if (x == 4 && y == 0) {
+			assert(v == 1);
+		} else if (x == 4 && y == 7) {
+			assert(v == 1);
+		} else if (x == 0 && y == 7) {
+			assert(v == 1);
+		} else {
+			assert(v == 0);
+		}
+	});
 };
