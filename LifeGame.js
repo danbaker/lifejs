@@ -51,9 +51,7 @@ LifeGame.prototype.startRunning = function()
 {
 	var that = this;
 	this.isRunning = true;
-	console.log("Start");
 	this.runningTimer = setInterval(function() {
-		console.log("Ping");
 		that.board.tickToNextState();
 		that.redrawCurrentState();
 	}, 1);
@@ -62,6 +60,5 @@ LifeGame.prototype.startRunning = function()
 LifeGame.prototype.pauseRunning = function()
 {
 	this.isRunning = false;
-	console.log("Paused");
 	clearInterval(this.runningTimer);
 };

@@ -38,8 +38,15 @@ var lifeGame;
 			boardHigh = bHigh;
 			htmlCanvas.width = boardWide * squareSize + 1;
 			htmlCanvas.height = boardHigh * squareSize + 1;
-		
+			
+			var wasRunning = lifeGame? lifeGame.isRunning : false;
+			if (wasRunning) {
+				lifeGame.pauseRunning();
+			}
 			lifeGame = new LifeGame(boardWide, boardHigh, ctx, squareSize);
+			if (wasRunning) {
+				lifeGame.startRunning();
+			}
 		}
 		redrawEverything();		
 	}
